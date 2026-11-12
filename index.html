@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>系统导航 · 全部已部署项目</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232f6fed'/><path d='M9 22h14M9 16h14M9 10h14' stroke='white' stroke-width='2.6' stroke-linecap='round'/></svg>">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pri:#2f6fed; --bg:#f4f6fa; --card:#fff; --line:#e3e8f0;
+  --ink:#151b26; --ink2:#5a6577; --ink3:#8b95a7;
+}
+body{
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+
+/* 顶栏 */
+header.top{
+  background:linear-gradient(135deg,#1c3f8f,#2f6fed 55%,#4f8ef7);
+  color:#fff; padding:34px 0 30px;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.top h1{font-size:26px;font-weight:650;letter-spacing:.5px;display:flex;align-items:center;gap:11px}
+.top h1 svg{flex:none;opacity:.92}
+.top .sub{margin-top:9px;font-size:13.5px;color:#c8d8f8}
+.top .sub b{color:#fff;font-weight:600}
+.stats{display:flex;gap:26px;margin-top:20px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:9px 16px;min-width:96px}
+.stat em{display:block;font-size:20px;font-weight:650;font-style:normal;line-height:1.25}
+.stat span{font-size:12px;color:#c8d8f8}
+
+/* 工具条 */
+.bar{position:sticky;top:0;z-index:20;background:rgba(244,246,250,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:14px;padding-top:11px;padding-bottom:11px;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:220px;max-width:360px}
+.search input{
+  width:100%;height:36px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  padding:0 34px 0 33px;font-size:14px;color:var(--ink);outline:none;transition:.16s;
+}
+.search input:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(47,111,237,.12)}
+.search svg{position:absolute;left:10px;top:9px;color:var(--ink3)}
+.search kbd{position:absolute;right:9px;top:8px;font:11px/18px ui-monospace,monospace;color:var(--ink3);border:1px solid var(--line);border-radius:4px;padding:0 5px;background:#fafbfd}
+.jumps{display:flex;gap:7px;flex-wrap:wrap}
+.jump{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 11px 5px 8px;transition:.15s}
+.jump:hover{border-color:var(--pri);color:var(--pri)}
+.jump i{width:7px;height:7px;border-radius:50%;display:block}
+.jump span{color:var(--ink3);font-size:11.5px}
+.bar .right{margin-left:auto;display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink3)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:7px;height:30px;padding:0 12px;font-size:12.5px;color:var(--ink2);cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--pri);color:var(--pri)}
+.btn:disabled{opacity:.55;cursor:default}
+
+/* 分组 */
+main{padding:26px 0 60px}
+.group{margin-bottom:34px;scroll-margin-top:64px}
+.ghead{margin-bottom:13px}
+.ghead h2{font-size:16.5px;font-weight:640;display:flex;align-items:center;gap:9px}
+.ghead h2 i{width:4px;height:16px;border-radius:2px;display:block}
+.ghead p{font-size:13px;color:var(--ink2);margin-top:5px;margin-left:13px}
+.ghead .cnt{color:var(--ink3);margin-left:9px;font-size:12.5px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:11px}
+
+/* 卡片 */
+.card{
+  position:relative;display:flex;gap:11px;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:13px 14px 12px;transition:border-color .16s,box-shadow .16s,transform .16s;
+}
+.card:hover{border-color:#c3d3f2;box-shadow:0 4px 16px -6px rgba(21,27,38,.13);transform:translateY(-1px)}
+.code{
+  flex:none;width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.2px;
+}
+.body{display:flex;flex-direction:column;min-width:0;flex:1}
+.line1{display:flex;align-items:center;gap:7px;min-width:0}
+.line1 b{font-size:14.5px;font-weight:620;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{flex:none;font-size:10.5px;letter-spacing:.3px;color:#2f6fed;background:#eaf1fe;border-radius:4px;padding:1px 5px;font-weight:600}
+.desc{font-size:12.5px;color:var(--ink2);margin-top:4px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:11.5px;color:var(--ink3)}
+.meta i{font-family:ui-monospace,monospace;font-style:normal}
+
+/* 状态点 */
+.dot{
+  position:absolute;top:12px;right:12px;width:6px;height:6px;border-radius:50%;
+  background:#cbd2de;transition:background .2s
+}
+.dot[data-st=ok]{background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.13)}
+.dot[data-st=warn]{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.13)}
+.dot[data-st=err]{background:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.13)}
+
+.empty{padding:60px 0;text-align:center;color:var(--ink3);font-size:14px;display:none}
+
+/* 手机 APP 区 */
+.jump-app i{background:linear-gradient(135deg,#2f6fed,#7c3aed)}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:9px}
+.appcard{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .16s,box-shadow .16s,transform .16s;
+}
+.appcard:hover{border-color:#c3d3f2;box-shadow:0 4px 16px -6px rgba(21,27,38,.13);transform:translateY(-1px)}
+.appmain{position:relative;display:flex;align-items:center;gap:10px;padding:11px 12px 10px;min-width:0}
+.appicon{
+  flex:none;width:38px;height:38px;border-radius:10px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 3px rgba(21,27,38,.16);
+}
+.appicon img{width:100%;height:100%;object-fit:contain;display:block}
+.appbody{display:flex;flex-direction:column;min-width:0;flex:1;padding-right:10px}
+.appname{font-size:13.5px;font-weight:620;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appdesc{font-size:11.5px;color:var(--ink3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appcard .dot{top:11px;right:11px;width:5px;height:5px}
+.appinstall{
+  display:flex;align-items:center;justify-content:center;gap:5px;width:100%;
+  border:0;border-top:1px solid var(--line);background:#fbfcfe;color:var(--ink2);
+  font-size:12px;padding:7px 0 8px;cursor:pointer;transition:.15s;font-family:inherit;
+}
+.appinstall:hover{background:#eef4ff;color:var(--pri)}
+.appinstall svg{flex:none}
+.anote{margin-top:11px;font-size:12px;color:var(--ink3);line-height:1.65}
+
+/* 安装引导弹层 */
+.mask{
+  position:fixed;inset:0;z-index:60;background:rgba(15,23,42,.44);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  animation:fade .16s ease-out;
+}
+.mask[hidden]{display:none}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{
+  position:relative;width:100%;max-width:420px;background:#fff;border-radius:14px;
+  padding:22px 22px 18px;box-shadow:0 24px 60px -18px rgba(15,23,42,.45);
+  animation:pop .18s cubic-bezier(.2,.9,.3,1.1);
+}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.sheet .x{
+  position:absolute;top:12px;right:12px;width:26px;height:26px;border:0;border-radius:50%;
+  background:#f1f4f9;color:var(--ink3);font-size:16px;line-height:1;cursor:pointer;
+}
+.sheet .x:hover{background:#e6ebf4;color:var(--ink)}
+.sh-head{display:flex;align-items:center;gap:12px;padding-right:26px}
+.sh-icon{flex:none;width:46px;height:46px;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(21,27,38,.18)}
+.sh-icon img{width:100%;height:100%;object-fit:contain;display:block}
+.sh-head b{display:block;font-size:15px;font-weight:640;line-height:1.35}
+.sh-head i{display:block;font-size:12px;font-style:normal;color:var(--ink3);margin-top:3px;line-height:1.4}
+.tabs{display:flex;gap:6px;margin:16px 0 12px;background:#f1f4f9;padding:3px;border-radius:8px}
+.tabs button{
+  flex:1;border:0;background:transparent;font-size:12.5px;color:var(--ink2);
+  padding:6px 0;border-radius:6px;cursor:pointer;transition:.14s;font-family:inherit;
+}
+.tabs button[aria-selected=true]{background:#fff;color:var(--pri);font-weight:600;box-shadow:0 1px 3px rgba(21,27,38,.1)}
+.steps{list-style:none;counter-reset:s;font-size:13px;color:var(--ink2);line-height:1.65}
+.steps li{position:relative;padding-left:26px;margin-bottom:9px}
+.steps li::before{
+  counter-increment:s;content:counter(s);
+  position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:50%;
+  background:#eaf1fe;color:var(--pri);font:600 11px/18px ui-monospace,monospace;text-align:center;
+}
+.steps li b{color:var(--ink);font-weight:620}
+.steps li code{font-family:ui-monospace,monospace;background:#f1f4f9;border-radius:4px;padding:1px 4px;font-size:12px}
+.sh-warn{
+  margin-top:4px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;
+  border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.55;
+}
+.sh-warn[hidden]{display:none}
+.sh-foot{display:flex;gap:9px;margin-top:16px}
+.sh-foot a,.sh-foot button{
+  flex:1;height:36px;border-radius:8px;font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;transition:.15s;text-decoration:none;
+}
+.sh-open{background:var(--pri);color:#fff;border:1px solid var(--pri)}
+.sh-open:hover{background:#2560d0}
+.sh-copy{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.sh-copy:hover{border-color:var(--pri);color:var(--pri)}
+
+footer.btm{border-top:1px solid var(--line);padding:20px 0 34px;font-size:12.5px;color:var(--ink3)}
+footer.btm .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+footer.btm code{font-family:ui-monospace,monospace;color:var(--ink2)}
+
+@media (max-width:640px){
+  .wrap{padding:0 15px}
+  body{overflow-x:hidden}
+  .top{padding:26px 0 22px}
+  .top h1{font-size:20px;gap:8px}
+  .top h1 svg{width:22px;height:22px}
+  .top .sub{font-size:12.5px;line-height:1.55;margin-top:8px}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}
+  .stat{min-width:0;padding:8px 11px}
+  .stat em{font-size:17px}
+  .stat span{font-size:11.5px}
+  .grid{grid-template-columns:1fr}
+  .search{max-width:none;flex:1 1 100%}
+  .bar .wrap{gap:9px;padding-top:10px;padding-bottom:10px}
+  .bar .right{margin-left:0;width:100%;justify-content:flex-start;gap:10px;flex-wrap:wrap}
+  .jumps{width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .jumps::-webkit-scrollbar{display:none}
+  .jump{flex:0 0 auto;font-size:12px;padding:4px 9px 4px 7px}
+  .ghead p{margin-left:13px;font-size:12.5px}
+  main{padding:20px 0 44px}
+  .group{margin-bottom:26px}
+  .agrid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .appmain{padding:9px 9px 8px;gap:8px}
+  .appicon{width:32px;height:32px;border-radius:8px}
+  .appname{font-size:12.5px}
+  .appdesc{display:none}
+  .appbody{padding-right:8px}
+  .appinstall{font-size:11.5px;padding:6px 0 7px}
+  .anote{font-size:11.5px;line-height:1.6}
+  .mask{padding:0;align-items:flex-end}
+  .sheet{max-width:none;border-radius:16px 16px 0 0;padding:20px 16px calc(16px + env(safe-area-inset-bottom))}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/>
+        <rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/>
+      </svg>
+      系统导航
+    </h1>
+    <div class="sub">云服务器 <b>42.193.158.63</b> 上部署的 <b>55</b> 个系统、<b>27</b> 个手机 APP，一处进入。</div>
+    <div class="stats">
+      <div class="stat"><em>55</em><span>已部署系统</span></div>
+      <div class="stat"><em>27</em><span>手机 APP</span></div>
+      <div class="stat"><em id="stOk">—</em><span>当前在线</span></div>
+      <div class="stat"><em id="stBad">—</em><span>待确认</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+      <input id="q" type="search" placeholder="搜索名称、路径或用途" autocomplete="off">
+      <kbd>/</kbd>
+    </div>
+    <div class="jumps">
+      <a class="jump jump-app" href="#g-app"><i></i>手机 APP<span>27</span></a>
+      <a class="jump" href="#g-platform"><i style="background:#2f6fed"></i>平台与基础设施<span>5</span></a>
+      <a class="jump" href="#g-rd"><i style="background:#7c3aed"></i>研发与知识<span>6</span></a>
+      <a class="jump" href="#g-biz"><i style="background:#0d9488"></i>企业运营<span>29</span></a>
+      <a class="jump" href="#g-ec"><i style="background:#e11d48"></i>电商矩阵<span>12</span></a>
+      <a class="jump" href="#g-api"><i style="background:#d97706"></i>AI 能力服务<span>3</span></a>
+    </div>
+    <div class="right">
+      <span id="probeTip">状态检测中…</span>
+      <button class="btn" id="reprobe">重新检测</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <section class="group group-app" id="g-app">
+      <header class="ghead">
+        <h2><i style="background:linear-gradient(180deg,#2f6fed,#7c3aed)"></i>手机 APP</h2>
+        <p>每个系统都有一套手机端，装到桌面后点图标直接进，全屏、没有地址栏。<span class="cnt">27 个</span></p>
+      </header>
+      <div class="agrid">
+        <div class="appcard" data-app="dmp">
+          <a class="appmain" href="http://42.193.158.63/dmp/m/" target="_blank" rel="noopener"
+             title="飞舞数据中台 · http://42.193.158.63/dmp/m/"
+             data-name="飞舞数据中台" data-path="http://42.193.158.63/dmp/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0e7490">
+              <img src="http://42.193.158.63/dmp/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞舞</span>
+              <span class="appdesc">飞舞数据中台</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/dmp/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="dmp" data-name="飞舞数据中台" data-short="飞舞"
+                  data-icon="http://42.193.158.63/dmp/m/icon.svg" data-theme="#0e7490" data-landing="http://42.193.158.63/dmp/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="okr">
+          <a class="appmain" href="http://42.193.158.63/okr/m/" target="_blank" rel="noopener"
+             title="飞绩绩效管理系统 · http://42.193.158.63/okr/m/"
+             data-name="飞绩绩效管理系统" data-path="http://42.193.158.63/okr/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0369a1">
+              <img src="http://42.193.158.63/okr/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞绩OKR</span>
+              <span class="appdesc">飞绩绩效管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/okr/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="okr" data-name="飞绩绩效管理系统" data-short="飞绩OKR"
+                  data-icon="http://42.193.158.63/okr/m/icon.svg" data-theme="#0369a1" data-landing="http://42.193.158.63/okr/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="lms">
+          <a class="appmain" href="http://42.193.158.63/lms/m/" target="_blank" rel="noopener"
+             title="飞学企业学习平台 · http://42.193.158.63/lms/m/"
+             data-name="飞学企业学习平台" data-path="http://42.193.158.63/lms/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#059669">
+              <img src="http://42.193.158.63/lms/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞学LMS</span>
+              <span class="appdesc">飞学企业学习平台</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/lms/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="lms" data-name="飞学企业学习平台" data-short="飞学LMS"
+                  data-icon="http://42.193.158.63/lms/m/icon.svg" data-theme="#059669" data-landing="http://42.193.158.63/lms/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="kms">
+          <a class="appmain" href="http://42.193.158.63/kms/m/" target="_blank" rel="noopener"
+             title="飞知知识管理系统 · http://42.193.158.63/kms/m/"
+             data-name="飞知知识管理系统" data-path="http://42.193.158.63/kms/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0e7490">
+              <img src="http://42.193.158.63/kms/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞知KMS</span>
+              <span class="appdesc">飞知知识管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/kms/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="kms" data-name="飞知知识管理系统" data-short="飞知KMS"
+                  data-icon="http://42.193.158.63/kms/m/icon.svg" data-theme="#0e7490" data-landing="http://42.193.158.63/kms/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="edu">
+          <a class="appmain" href="http://42.193.158.63/edu/m/" target="_blank" rel="noopener"
+             title="飞育教育管理系统 · http://42.193.158.63/edu/m/"
+             data-name="飞育教育管理系统" data-path="http://42.193.158.63/edu/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#059669">
+              <img src="http://42.193.158.63/edu/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞育</span>
+              <span class="appdesc">飞育教育管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/edu/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="edu" data-name="飞育教育管理系统" data-short="飞育"
+                  data-icon="http://42.193.158.63/edu/m/icon.svg" data-theme="#059669" data-landing="http://42.193.158.63/edu/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="erp">
+          <a class="appmain" href="http://42.193.158.63/erp/m/" target="_blank" rel="noopener"
+             title="飞鸢ERP系统 · http://42.193.158.63/erp/m/"
+             data-name="飞鸢ERP系统" data-path="http://42.193.158.63/erp/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#334155">
+              <img src="http://42.193.158.63/erp/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞鸢ERP</span>
+              <span class="appdesc">飞鸢ERP系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/erp/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="erp" data-name="飞鸢ERP系统" data-short="飞鸢ERP"
+                  data-icon="http://42.193.158.63/erp/m/icon.svg" data-theme="#334155" data-landing="http://42.193.158.63/erp/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="fin">
+          <a class="appmain" href="http://42.193.158.63/fin/m/" target="_blank" rel="noopener"
+             title="飞云财务核算系统 · http://42.193.158.63/fin/m/"
+             data-name="飞云财务核算系统" data-path="http://42.193.158.63/fin/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#475569">
+              <img src="http://42.193.158.63/fin/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞云</span>
+              <span class="appdesc">飞云财务核算系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/fin/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="fin" data-name="飞云财务核算系统" data-short="飞云"
+                  data-icon="http://42.193.158.63/fin/m/icon.svg" data-theme="#475569" data-landing="http://42.193.158.63/fin/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="finan">
+          <a class="appmain" href="http://42.193.158.63/finan/m/" target="_blank" rel="noopener"
+             title="飞融金融管理系统 · http://42.193.158.63/finan/m/"
+             data-name="飞融金融管理系统" data-path="http://42.193.158.63/finan/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#1d4ed8">
+              <img src="http://42.193.158.63/finan/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞融FMS</span>
+              <span class="appdesc">飞融金融管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/finan/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="finan" data-name="飞融金融管理系统" data-short="飞融FMS"
+                  data-icon="http://42.193.158.63/finan/m/icon.svg" data-theme="#1d4ed8" data-landing="http://42.193.158.63/finan/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="cost">
+          <a class="appmain" href="http://42.193.158.63/cost/m/" target="_blank" rel="noopener"
+             title="飞奔成本管理系统 · http://42.193.158.63/cost/m/"
+             data-name="飞奔成本管理系统" data-path="http://42.193.158.63/cost/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#4f46e5">
+              <img src="http://42.193.158.63/cost/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞奔</span>
+              <span class="appdesc">飞奔成本管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/cost/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="cost" data-name="飞奔成本管理系统" data-short="飞奔"
+                  data-icon="http://42.193.158.63/cost/m/icon.svg" data-theme="#4f46e5" data-landing="http://42.193.158.63/cost/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="tax">
+          <a class="appmain" href="http://42.193.158.63/tax/m/" target="_blank" rel="noopener"
+             title="飞税税务管理系统 · http://42.193.158.63/tax/m/"
+             data-name="飞税税务管理系统" data-path="http://42.193.158.63/tax/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#7c3aed">
+              <img src="http://42.193.158.63/tax/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞税</span>
+              <span class="appdesc">飞税税务管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/tax/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="tax" data-name="飞税税务管理系统" data-short="飞税"
+                  data-icon="http://42.193.158.63/tax/m/icon.svg" data-theme="#7c3aed" data-landing="http://42.193.158.63/tax/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="hr">
+          <a class="appmain" href="http://42.193.158.63/hr/m/" target="_blank" rel="noopener"
+             title="飞花HRM系统 · http://42.193.158.63/hr/m/"
+             data-name="飞花HRM系统" data-path="http://42.193.158.63/hr/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#be185d">
+              <img src="http://42.193.158.63/hr/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞花HRM</span>
+              <span class="appdesc">飞花HRM系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/hr/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="hr" data-name="飞花HRM系统" data-short="飞花HRM"
+                  data-icon="http://42.193.158.63/hr/m/icon.svg" data-theme="#be185d" data-landing="http://42.193.158.63/hr/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="oa">
+          <a class="appmain" href="http://42.193.158.63/oa/m/" target="_blank" rel="noopener"
+             title="飞效OA管理系统 · http://42.193.158.63/oa/m/"
+             data-name="飞效OA管理系统" data-path="http://42.193.158.63/oa/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#2563eb">
+              <img src="http://42.193.158.63/oa/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞效OA</span>
+              <span class="appdesc">飞效OA管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/oa/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="oa" data-name="飞效OA管理系统" data-short="飞效OA"
+                  data-icon="http://42.193.158.63/oa/m/icon.svg" data-theme="#2563eb" data-landing="http://42.193.158.63/oa/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="flow">
+          <a class="appmain" href="http://42.193.158.63/flow/m/" target="_blank" rel="noopener"
+             title="飞流流程管理系统 · http://42.193.158.63/flow/m/"
+             data-name="飞流流程管理系统" data-path="http://42.193.158.63/flow/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0369a1">
+              <img src="http://42.193.158.63/flow/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞流BPM</span>
+              <span class="appdesc">飞流流程管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/flow/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="flow" data-name="飞流流程管理系统" data-short="飞流BPM"
+                  data-icon="http://42.193.158.63/flow/m/icon.svg" data-theme="#0369a1" data-landing="http://42.193.158.63/flow/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="aps">
+          <a class="appmain" href="http://42.193.158.63/aps/m/" target="_blank" rel="noopener"
+             title="飞划APS系统 · http://42.193.158.63/aps/m/"
+             data-name="飞划APS系统" data-path="http://42.193.158.63/aps/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#c2410c">
+              <img src="http://42.193.158.63/aps/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞划APS</span>
+              <span class="appdesc">飞划APS系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/aps/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="aps" data-name="飞划APS系统" data-short="飞划APS"
+                  data-icon="http://42.193.158.63/aps/m/icon.svg" data-theme="#c2410c" data-landing="http://42.193.158.63/aps/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="tms">
+          <a class="appmain" href="http://42.193.158.63/tms/m/" target="_blank" rel="noopener"
+             title="飞运运输管理系统 · http://42.193.158.63/tms/m/"
+             data-name="飞运运输管理系统" data-path="http://42.193.158.63/tms/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#ea580c">
+              <img src="http://42.193.158.63/tms/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞运TMS</span>
+              <span class="appdesc">飞运运输管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/tms/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="tms" data-name="飞运运输管理系统" data-short="飞运TMS"
+                  data-icon="http://42.193.158.63/tms/m/icon.svg" data-theme="#ea580c" data-landing="http://42.193.158.63/tms/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="ocean">
+          <a class="appmain" href="http://42.193.158.63/ocean/m/" target="_blank" rel="noopener"
+             title="飞洋海洋运输管理系统 · http://42.193.158.63/ocean/m/"
+             data-name="飞洋海洋运输管理系统" data-path="http://42.193.158.63/ocean/m/" data-desc="飞洋海洋运输管理系统手机端：船期、订舱、箱货、账单随身管" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0e7490">
+              <img src="http://42.193.158.63/ocean/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞洋OTMS</span>
+              <span class="appdesc">飞洋海洋运输管理系统手机端：船期、订舱、箱货、账单随身管</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/ocean/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="ocean" data-name="飞洋海洋运输管理系统" data-short="飞洋OTMS"
+                  data-icon="http://42.193.158.63/ocean/m/icon.svg" data-theme="#0e7490" data-landing="http://42.193.158.63/ocean/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="cus">
+          <a class="appmain" href="http://42.193.158.63/cus/m/" target="_blank" rel="noopener"
+             title="飞扬关务系统 · http://42.193.158.63/cus/m/"
+             data-name="飞扬关务系统" data-path="http://42.193.158.63/cus/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#7e22ce">
+              <img src="http://42.193.158.63/cus/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞扬</span>
+              <span class="appdesc">飞扬关务系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/cus/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="cus" data-name="飞扬关务系统" data-short="飞扬"
+                  data-icon="http://42.193.158.63/cus/m/icon.svg" data-theme="#7e22ce" data-landing="http://42.193.158.63/cus/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="retail">
+          <a class="appmain" href="http://42.193.158.63/retail/m/" target="_blank" rel="noopener"
+             title="飞售零售管理系统 · http://42.193.158.63/retail/m/"
+             data-name="飞售零售管理系统" data-path="http://42.193.158.63/retail/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#b45309">
+              <img src="http://42.193.158.63/retail/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞售RMS</span>
+              <span class="appdesc">飞售零售管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/retail/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="retail" data-name="飞售零售管理系统" data-short="飞售RMS"
+                  data-icon="http://42.193.158.63/retail/m/icon.svg" data-theme="#b45309" data-landing="http://42.193.158.63/retail/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="rms">
+          <a class="appmain" href="http://42.193.158.63/rms/m/" target="_blank" rel="noopener"
+             title="飞餐餐饮管理系统 · http://42.193.158.63/rms/m/"
+             data-name="飞餐餐饮管理系统" data-path="http://42.193.158.63/rms/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#dc2626">
+              <img src="http://42.193.158.63/rms/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞餐RMS</span>
+              <span class="appdesc">飞餐餐饮管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/rms/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="rms" data-name="飞餐餐饮管理系统" data-short="飞餐RMS"
+                  data-icon="http://42.193.158.63/rms/m/icon.svg" data-theme="#dc2626" data-landing="http://42.193.158.63/rms/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="his">
+          <a class="appmain" href="http://42.193.158.63/his/m/" target="_blank" rel="noopener"
+             title="飞医医疗管理系统 · http://42.193.158.63/his/m/"
+             data-name="飞医医疗管理系统" data-path="http://42.193.158.63/his/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0d9488">
+              <img src="http://42.193.158.63/his/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞医HIS</span>
+              <span class="appdesc">飞医医疗管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/his/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="his" data-name="飞医医疗管理系统" data-short="飞医HIS"
+                  data-icon="http://42.193.158.63/his/m/icon.svg" data-theme="#0d9488" data-landing="http://42.193.158.63/his/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="pu">
+          <a class="appmain" href="http://42.193.158.63/pu/m/" target="_blank" rel="noopener"
+             title="飞瀑能源管理系统 · http://42.193.158.63/pu/m/"
+             data-name="飞瀑能源管理系统" data-path="http://42.193.158.63/pu/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0891b2">
+              <img src="http://42.193.158.63/pu/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞瀑</span>
+              <span class="appdesc">飞瀑能源管理系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/pu/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="pu" data-name="飞瀑能源管理系统" data-short="飞瀑"
+                  data-icon="http://42.193.158.63/pu/m/icon.svg" data-theme="#0891b2" data-landing="http://42.193.158.63/pu/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="fh">
+          <a class="appmain" href="http://42.193.158.63/fh/m/" target="_blank" rel="noopener"
+             title="飞虹股票交易系统 · http://42.193.158.63/fh/m/"
+             data-name="飞虹股票交易系统" data-path="http://42.193.158.63/fh/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#b91c1c">
+              <img src="http://42.193.158.63/fh/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞虹</span>
+              <span class="appdesc">飞虹股票交易系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/fh/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="fh" data-name="飞虹股票交易系统" data-short="飞虹"
+                  data-icon="http://42.193.158.63/fh/m/icon.svg" data-theme="#b91c1c" data-landing="http://42.193.158.63/fh/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="qms">
+          <a class="appmain" href="http://42.193.158.63/qms/m/" target="_blank" rel="noopener"
+             title="飞控QMS系统 · http://42.193.158.63/qms/m/"
+             data-name="飞控QMS系统" data-path="http://42.193.158.63/qms/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#0f766e">
+              <img src="http://42.193.158.63/qms/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞控QMS</span>
+              <span class="appdesc">飞控QMS系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/qms/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="qms" data-name="飞控QMS系统" data-short="飞控QMS"
+                  data-icon="http://42.193.158.63/qms/m/icon.svg" data-theme="#0f766e" data-landing="http://42.193.158.63/qms/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="wms">
+          <a class="appmain" href="http://42.193.158.63/wms/m/" target="_blank" rel="noopener"
+             title="飞传WMS系统 · http://42.193.158.63/wms/m/"
+             data-name="飞传WMS系统" data-path="http://42.193.158.63/wms/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#9333ea">
+              <img src="http://42.193.158.63/wms/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞传WMS</span>
+              <span class="appdesc">飞传WMS系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/wms/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="wms" data-name="飞传WMS系统" data-short="飞传WMS"
+                  data-icon="http://42.193.158.63/wms/m/icon.svg" data-theme="#9333ea" data-landing="http://42.193.158.63/wms/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="mes">
+          <a class="appmain" href="http://42.193.158.63/mes/m/" target="_blank" rel="noopener"
+             title="飞驰MES系统 · http://42.193.158.63/mes/m/"
+             data-name="飞驰MES系统" data-path="http://42.193.158.63/mes/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#b91c1c">
+              <img src="http://42.193.158.63/mes/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞驰MES</span>
+              <span class="appdesc">飞驰MES系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/mes/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="mes" data-name="飞驰MES系统" data-short="飞驰MES"
+                  data-icon="http://42.193.158.63/mes/m/icon.svg" data-theme="#b91c1c" data-landing="http://42.193.158.63/mes/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="scm">
+          <a class="appmain" href="http://42.193.158.63/scm/m/" target="_blank" rel="noopener"
+             title="飞泉SCM系统 · http://42.193.158.63/scm/m/"
+             data-name="飞泉SCM系统" data-path="http://42.193.158.63/scm/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#1d7fd8">
+              <img src="http://42.193.158.63/scm/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞泉SCM</span>
+              <span class="appdesc">飞泉SCM系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/scm/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="scm" data-name="飞泉SCM系统" data-short="飞泉SCM"
+                  data-icon="http://42.193.158.63/scm/m/icon.svg" data-theme="#1d7fd8" data-landing="http://42.193.158.63/scm/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+        <div class="appcard" data-app="crm">
+          <a class="appmain" href="http://42.193.158.63/crm/m/" target="_blank" rel="noopener"
+             title="飞鹰CRM系统 · http://42.193.158.63/crm/m/"
+             data-name="飞鹰CRM系统" data-path="http://42.193.158.63/crm/m/" data-desc="" data-code="APP"
+             data-group="手机 APP" data-port="-">
+            <span class="appicon" style="background:#d97706">
+              <img src="http://42.193.158.63/crm/m/icon.svg" alt="" loading="lazy" onerror="this.style.display='none'">
+            </span>
+            <span class="appbody">
+              <span class="appname">飞鹰CRM</span>
+              <span class="appdesc">飞鹰CRM系统</span>
+            </span>
+            <span class="dot" data-probe="http://42.193.158.63/crm/m/" title="检测中"></span>
+          </a>
+          <button class="appinstall" type="button"
+                  data-prefix="crm" data-name="飞鹰CRM系统" data-short="飞鹰CRM"
+                  data-icon="http://42.193.158.63/crm/m/icon.svg" data-theme="#d97706" data-landing="http://42.193.158.63/crm/m/"
+                  title="安装到手机桌面">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            安装
+          </button>
+        </div>
+      </div>
+      <p class="anote">这些是 PWA 应用，不上应用商店、不下载安装包。点「安装」看对应手机的添加步骤，一般三步完成；装完的图标和原生 APP 一样躺在桌面。</p>
+    </section>
+    <section class="group" id="g-platform">
+      <header class="ghead">
+        <h2><i style="background:#2f6fed"></i>平台与基础设施</h2>
+        <p>身份、主数据、数据中台与 Agent 网关，其他系统依赖这一层。<span class="cnt">5 个</span></p>
+      </header>
+      <div class="grid">
+        <a class="card" href="/" target="_blank" rel="noopener"
+           data-name="万千知识库" data-path="/" data-desc="文档沉淀、RAG 检索与 AI 问答的入口" data-code="KB"
+           data-group="平台与基础设施" data-port="8080">
+          <span class="dot" data-probe="/" title="检测中"></span>
+          <span class="code" style="color:#2f6fed;background:#2f6fed14">KB</span>
+          <span class="body">
+            <span class="line1"><b>万千知识库</b><span class="tag">本站</span></span>
+            <span class="desc">文档沉淀、RAG 检索与 AI 问答的入口</span>
+            <span class="meta"><i>/</i><em>:8080</em></span>
+          </span>
+        </a>
+        <a class="card" href="/sso/" target="_blank" rel="noopener"
+           data-name="飞证统一身份中心" data-path="/sso/" data-desc="单点登录、令牌签发与权限下发" data-code="SSO"
+           data-group="平台与基础设施" data-port="8040">
+          <span class="dot" data-probe="/sso/" title="检测中"></span>
+          <span class="code" style="color:#2f6fed;background:#2f6fed14">SSO</span>
+          <span class="body">
+            <span class="line1"><b>飞证统一身份中心</b><span class="tag">基础</span></span>
+            <span class="desc">单点登录、令牌签发与权限下发</span>
+            <span class="meta"><i>/sso/</i><em>:8040</em></span>
+          </span>
+        </a>
+        <a class="card" href="/mdm/" target="_blank" rel="noopener"
+           data-name="飞数主数据中心" data-path="/mdm/" data-desc="物料、客户、供应商等主数据的唯一来源" data-code="MDM"
+           data-group="平台与基础设施" data-port="8053">
+          <span class="dot" data-probe="/mdm/" title="检测中"></span>
+          <span class="code" style="color:#2f6fed;background:#2f6fed14">MDM</span>
+          <span class="body">
+            <span class="line1"><b>飞数主数据中心</b><span class="tag">基础</span></span>
+            <span class="desc">物料、客户、供应商等主数据的唯一来源</span>
+            <span class="meta"><i>/mdm/</i><em>:8053</em></span>
+          </span>
+        </a>
+        <a class="card" href="/dmp/" target="_blank" rel="noopener"
+           data-name="飞舞数据中台" data-path="/dmp/" data-desc="跨系统数据汇聚、指标计算与对外取数" data-code="DMP"
+           data-group="平台与基础设施" data-port="8054">
+          <span class="dot" data-probe="/dmp/" title="检测中"></span>
+          <span class="code" style="color:#2f6fed;background:#2f6fed14">DMP</span>
+          <span class="body">
+            <span class="line1"><b>飞舞数据中台</b><span class="tag">基础</span></span>
+            <span class="desc">跨系统数据汇聚、指标计算与对外取数</span>
+            <span class="meta"><i>/dmp/</i><em>:8054</em></span>
+          </span>
+        </a>
+        <a class="card" href="/nao/" target="_blank" rel="noopener"
+           data-name="飞脑 AI Agent 网关" data-path="/nao/" data-desc="Agent 编排、工具注册与模型路由" data-code="NAO"
+           data-group="平台与基础设施" data-port="8060">
+          <span class="dot" data-probe="/nao/" title="检测中"></span>
+          <span class="code" style="color:#2f6fed;background:#2f6fed14">NAO</span>
+          <span class="body">
+            <span class="line1"><b>飞脑 AI Agent 网关</b><span class="tag">AI</span></span>
+            <span class="desc">Agent 编排、工具注册与模型路由</span>
+            <span class="meta"><i>/nao/</i><em>:8060</em></span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="g-rd">
+      <header class="ghead">
+        <h2><i style="background:#7c3aed"></i>研发与知识</h2>
+        <p>项目怎么管、产品怎么做、知识怎么传。<span class="cnt">6 个</span></p>
+      </header>
+      <div class="grid">
+        <a class="card" href="/pm/" target="_blank" rel="noopener"
+           data-name="飞项项目管理系统" data-path="/pm/" data-desc="任务、工时、风险与交付进度" data-code="PM"
+           data-group="研发与知识" data-port="8042">
+          <span class="dot" data-probe="/pm/" title="检测中"></span>
+          <span class="code" style="color:#7c3aed;background:#7c3aed14">PM</span>
+          <span class="body">
+            <span class="line1"><b>飞项项目管理系统</b><span class="tag">主力</span></span>
+            <span class="desc">任务、工时、风险与交付进度</span>
+            <span class="meta"><i>/pm/</i><em>:8042</em></span>
+          </span>
+        </a>
+        <a class="card" href="/fy/" target="_blank" rel="noopener"
+           data-name="飞研研发管理系统" data-path="/fy/" data-desc="IPD 六阶段 + DCP 决策门禁 + TR 技术评审" data-code="IPD"
+           data-group="研发与知识" data-port="8061">
+          <span class="dot" data-probe="/fy/" title="检测中"></span>
+          <span class="code" style="color:#7c3aed;background:#7c3aed14">IPD</span>
+          <span class="body">
+            <span class="line1"><b>飞研研发管理系统</b><span class="tag">主力</span></span>
+            <span class="desc">IPD 六阶段 + DCP 决策门禁 + TR 技术评审</span>
+            <span class="meta"><i>/fy/</i><em>:8061</em></span>
+          </span>
+        </a>
+        <a class="card" href="/kms/" target="_blank" rel="noopener"
+           data-name="飞知知识管理系统" data-path="/kms/" data-desc="制度、流程、方案文档的分类归档与检索" data-code="KMS"
+           data-group="研发与知识" data-port="8050">
+          <span class="dot" data-probe="/kms/" title="检测中"></span>
+          <span class="code" style="color:#7c3aed;background:#7c3aed14">KMS</span>
+          <span class="body">
+            <span class="line1"><b>飞知知识管理系统</b></span>
+            <span class="desc">制度、流程、方案文档的分类归档与检索</span>
+            <span class="meta"><i>/kms/</i><em>:8050</em></span>
+          </span>
+        </a>
+        <a class="card" href="/lms/" target="_blank" rel="noopener"
+           data-name="飞学企业学习平台" data-path="/lms/" data-desc="课程、学习路径与培训记录" data-code="LMS"
+           data-group="研发与知识" data-port="8049">
+          <span class="dot" data-probe="/lms/" title="检测中"></span>
+          <span class="code" style="color:#7c3aed;background:#7c3aed14">LMS</span>
+          <span class="body">
+            <span class="line1"><b>飞学企业学习平台</b></span>
+            <span class="desc">课程、学习路径与培训记录</span>
+            <span class="meta"><i>/lms/</i><em>:8049</em></span>
+          </span>
+        </a>
+        <a class="card" href="/edu/" target="_blank" rel="noopener"
+           data-name="飞育教育管理系统" data-path="/edu/" data-desc="教学排课、学员与考核管理" data-code="EDU"
+           data-group="研发与知识" data-port="8025">
+          <span class="dot" data-probe="/edu/" title="检测中"></span>
+          <span class="code" style="color:#7c3aed;background:#7c3aed14">EDU</span>
+          <span class="body">
+            <span class="line1"><b>飞育教育管理系统</b></span>
+            <span class="desc">教学排课、学员与考核管理</span>
+            <span class="meta"><i>/edu/</i><em>:8025</em></span>
+          </span>
+        </a>
+        <a class="card" href="/okr/" target="_blank" rel="noopener"
+           data-name="飞绩绩效管理系统" data-path="/okr/" data-desc="目标对齐与季度绩效评估" data-code="OKR"
+           data-group="研发与知识" data-port="8047">
+          <span class="dot" data-probe="/okr/" title="检测中"></span>
+          <span class="code" style="color:#7c3aed;background:#7c3aed14">OKR</span>
+          <span class="body">
+            <span class="line1"><b>飞绩绩效管理系统</b></span>
+            <span class="desc">目标对齐与季度绩效评估</span>
+            <span class="meta"><i>/okr/</i><em>:8047</em></span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="g-biz">
+      <header class="ghead">
+        <h2><i style="background:#0d9488"></i>企业运营</h2>
+        <p>财务、人力、供应链、行业解决方案，数量最多的一批。<span class="cnt">29 个</span></p>
+      </header>
+      <div class="grid">
+        <a class="card" href="/erp/" target="_blank" rel="noopener"
+           data-name="飞鸢 ERP" data-path="/erp/" data-desc="产销存一体化，与财务、成本联动" data-code="ERP"
+           data-group="企业运营" data-port="8017">
+          <span class="dot" data-probe="/erp/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">ERP</span>
+          <span class="body">
+            <span class="line1"><b>飞鸢 ERP</b><span class="tag">核心</span></span>
+            <span class="desc">产销存一体化，与财务、成本联动</span>
+            <span class="meta"><i>/erp/</i><em>:8017</em></span>
+          </span>
+        </a>
+        <a class="card" href="/fin/" target="_blank" rel="noopener"
+           data-name="飞云财务核算系统" data-path="/fin/" data-desc="总账、应收应付、期末结账" data-code="FIN"
+           data-group="企业运营" data-port="8014">
+          <span class="dot" data-probe="/fin/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">FIN</span>
+          <span class="body">
+            <span class="line1"><b>飞云财务核算系统</b><span class="tag">核心</span></span>
+            <span class="desc">总账、应收应付、期末结账</span>
+            <span class="meta"><i>/fin/</i><em>:8014</em></span>
+          </span>
+        </a>
+        <a class="card" href="/finan/" target="_blank" rel="noopener"
+           data-name="飞融金融管理系统" data-path="/finan/" data-desc="资金计划、融资与授信管理" data-code="FINAN"
+           data-group="企业运营" data-port="8030">
+          <span class="dot" data-probe="/finan/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">FINAN</span>
+          <span class="body">
+            <span class="line1"><b>飞融金融管理系统</b></span>
+            <span class="desc">资金计划、融资与授信管理</span>
+            <span class="meta"><i>/finan/</i><em>:8030</em></span>
+          </span>
+        </a>
+        <a class="card" href="/cost/" target="_blank" rel="noopener"
+           data-name="飞奔成本管理系统" data-path="/cost/" data-desc="标准成本、差异分析与成本还原" data-code="COST"
+           data-group="企业运营" data-port="8020">
+          <span class="dot" data-probe="/cost/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">COST</span>
+          <span class="body">
+            <span class="line1"><b>飞奔成本管理系统</b></span>
+            <span class="desc">标准成本、差异分析与成本还原</span>
+            <span class="meta"><i>/cost/</i><em>:8020</em></span>
+          </span>
+        </a>
+        <a class="card" href="/tax/" target="_blank" rel="noopener"
+           data-name="飞税税务管理系统" data-path="/tax/" data-desc="发票、申报与税负测算" data-code="TAX"
+           data-group="企业运营" data-port="8024">
+          <span class="dot" data-probe="/tax/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">TAX</span>
+          <span class="body">
+            <span class="line1"><b>飞税税务管理系统</b></span>
+            <span class="desc">发票、申报与税负测算</span>
+            <span class="meta"><i>/tax/</i><em>:8024</em></span>
+          </span>
+        </a>
+        <a class="card" href="/clm/" target="_blank" rel="noopener"
+           data-name="飞签电子合同系统" data-path="/clm/" data-desc="合同起草、会签、电子签章与台账" data-code="CLM"
+           data-group="企业运营" data-port="8045">
+          <span class="dot" data-probe="/clm/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">CLM</span>
+          <span class="body">
+            <span class="line1"><b>飞签电子合同系统</b></span>
+            <span class="desc">合同起草、会签、电子签章与台账</span>
+            <span class="meta"><i>/clm/</i><em>:8045</em></span>
+          </span>
+        </a>
+        <a class="card" href="/hr/" target="_blank" rel="noopener"
+           data-name="飞花 HRM" data-path="/hr/" data-desc="组织、人事、薪酬与考勤" data-code="HR"
+           data-group="企业运营" data-port="8019">
+          <span class="dot" data-probe="/hr/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">HR</span>
+          <span class="body">
+            <span class="line1"><b>飞花 HRM</b></span>
+            <span class="desc">组织、人事、薪酬与考勤</span>
+            <span class="meta"><i>/hr/</i><em>:8019</em></span>
+          </span>
+        </a>
+        <a class="card" href="/ats/" target="_blank" rel="noopener"
+           data-name="飞聘招聘管理系统" data-path="/ats/" data-desc="职位发布、简历筛选与面试流转" data-code="ATS"
+           data-group="企业运营" data-port="8048">
+          <span class="dot" data-probe="/ats/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">ATS</span>
+          <span class="body">
+            <span class="line1"><b>飞聘招聘管理系统</b></span>
+            <span class="desc">职位发布、简历筛选与面试流转</span>
+            <span class="meta"><i>/ats/</i><em>:8048</em></span>
+          </span>
+        </a>
+        <a class="card" href="/oa/" target="_blank" rel="noopener"
+           data-name="飞效 OA 管理系统" data-path="/oa/" data-desc="审批、公文、会议与日程" data-code="OA"
+           data-group="企业运营" data-port="8023">
+          <span class="dot" data-probe="/oa/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">OA</span>
+          <span class="body">
+            <span class="line1"><b>飞效 OA 管理系统</b></span>
+            <span class="desc">审批、公文、会议与日程</span>
+            <span class="meta"><i>/oa/</i><em>:8023</em></span>
+          </span>
+        </a>
+        <a class="card" href="/flow/" target="_blank" rel="noopener"
+           data-name="飞流流程管理系统" data-path="/flow/" data-desc="流程建模、运行时引擎与超时催办" data-code="FLOW"
+           data-group="企业运营" data-port="8018">
+          <span class="dot" data-probe="/flow/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">FLOW</span>
+          <span class="body">
+            <span class="line1"><b>飞流流程管理系统</b></span>
+            <span class="desc">流程建模、运行时引擎与超时催办</span>
+            <span class="meta"><i>/flow/</i><em>:8018</em></span>
+          </span>
+        </a>
+        <a class="card" href="/itsm/" target="_blank" rel="noopener"
+           data-name="飞维 IT 服务台" data-path="/itsm/" data-desc="工单、事件、问题与变更管理" data-code="ITSM"
+           data-group="企业运营" data-port="8051">
+          <span class="dot" data-probe="/itsm/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">ITSM</span>
+          <span class="body">
+            <span class="line1"><b>飞维 IT 服务台</b></span>
+            <span class="desc">工单、事件、问题与变更管理</span>
+            <span class="meta"><i>/itsm/</i><em>:8051</em></span>
+          </span>
+        </a>
+        <a class="card" href="/eam/" target="_blank" rel="noopener"
+           data-name="飞衡设备维保系统" data-path="/eam/" data-desc="设备台账、点检、维修与备件" data-code="EAM"
+           data-group="企业运营" data-port="8044">
+          <span class="dot" data-probe="/eam/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">EAM</span>
+          <span class="body">
+            <span class="line1"><b>飞衡设备维保系统</b></span>
+            <span class="desc">设备台账、点检、维修与备件</span>
+            <span class="meta"><i>/eam/</i><em>:8044</em></span>
+          </span>
+        </a>
+        <a class="card" href="/ehs/" target="_blank" rel="noopener"
+           data-name="飞安安全环保系统" data-path="/ehs/" data-desc="隐患排查、作业许可与环保台账" data-code="EHS"
+           data-group="企业运营" data-port="8052">
+          <span class="dot" data-probe="/ehs/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">EHS</span>
+          <span class="body">
+            <span class="line1"><b>飞安安全环保系统</b></span>
+            <span class="desc">隐患排查、作业许可与环保台账</span>
+            <span class="meta"><i>/ehs/</i><em>:8052</em></span>
+          </span>
+        </a>
+        <a class="card" href="/fhems/" target="_blank" rel="noopener"
+           data-name="飞环环保物质管理系统" data-path="/fhems/" data-desc="危废、排放与环保物资全流程记录" data-code="FHEMS"
+           data-group="企业运营" data-port="8032">
+          <span class="dot" data-probe="/fhems/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">FHEMS</span>
+          <span class="body">
+            <span class="line1"><b>飞环环保物质管理系统</b></span>
+            <span class="desc">危废、排放与环保物资全流程记录</span>
+            <span class="meta"><i>/fhems/</i><em>:8032</em></span>
+          </span>
+        </a>
+        <a class="card" href="/aps/" target="_blank" rel="noopener"
+           data-name="飞划 APS 管理系统" data-path="/aps/" data-desc="高级排产、产能平衡与交期承诺" data-code="APS"
+           data-group="企业运营" data-port="8022">
+          <span class="dot" data-probe="/aps/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">APS</span>
+          <span class="body">
+            <span class="line1"><b>飞划 APS 管理系统</b></span>
+            <span class="desc">高级排产、产能平衡与交期承诺</span>
+            <span class="meta"><i>/aps/</i><em>:8022</em></span>
+          </span>
+        </a>
+        <a class="card" href="/mall/" target="_blank" rel="noopener"
+           data-name="飞铺电商商城系统" data-path="/mall/" data-desc="企业自营商城，商品与订单管理" data-code="MALL"
+           data-group="企业运营" data-port="8046">
+          <span class="dot" data-probe="/mall/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">MALL</span>
+          <span class="body">
+            <span class="line1"><b>飞铺电商商城系统</b></span>
+            <span class="desc">企业自营商城，商品与订单管理</span>
+            <span class="meta"><i>/mall/</i><em>:8046</em></span>
+          </span>
+        </a>
+        <a class="card" href="/retail/" target="_blank" rel="noopener"
+           data-name="飞售零售管理系统" data-path="/retail/" data-desc="门店、收银、会员与促销" data-code="RETAIL"
+           data-group="企业运营" data-port="8029">
+          <span class="dot" data-probe="/retail/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">RETAIL</span>
+          <span class="body">
+            <span class="line1"><b>飞售零售管理系统</b></span>
+            <span class="desc">门店、收银、会员与促销</span>
+            <span class="meta"><i>/retail/</i><em>:8029</em></span>
+          </span>
+        </a>
+        <a class="card" href="/rms/" target="_blank" rel="noopener"
+           data-name="飞餐餐饮管理系统" data-path="/rms/" data-desc="点餐、出品、桌台与外卖对接" data-code="RMS"
+           data-group="企业运营" data-port="8027">
+          <span class="dot" data-probe="/rms/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">RMS</span>
+          <span class="body">
+            <span class="line1"><b>飞餐餐饮管理系统</b></span>
+            <span class="desc">点餐、出品、桌台与外卖对接</span>
+            <span class="meta"><i>/rms/</i><em>:8027</em></span>
+          </span>
+        </a>
+        <a class="card" href="/his/" target="_blank" rel="noopener"
+           data-name="飞医医疗管理系统" data-path="/his/" data-desc="挂号、门诊、住院与医嘱" data-code="HIS"
+           data-group="企业运营" data-port="8028">
+          <span class="dot" data-probe="/his/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">HIS</span>
+          <span class="body">
+            <span class="line1"><b>飞医医疗管理系统</b></span>
+            <span class="desc">挂号、门诊、住院与医嘱</span>
+            <span class="meta"><i>/his/</i><em>:8028</em></span>
+          </span>
+        </a>
+        <a class="card" href="/tms/" target="_blank" rel="noopener"
+           data-name="飞运运输管理系统" data-path="/tms/" data-desc="运单、调度、在途跟踪与结算" data-code="TMS"
+           data-group="企业运营" data-port="8026">
+          <span class="dot" data-probe="/tms/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">TMS</span>
+          <span class="body">
+            <span class="line1"><b>飞运运输管理系统</b></span>
+            <span class="desc">运单、调度、在途跟踪与结算</span>
+            <span class="meta"><i>/tms/</i><em>:8026</em></span>
+          </span>
+        </a>
+        <a class="card" href="/ocean/" target="_blank" rel="noopener"
+           data-name="飞洋海洋运输管理系统" data-path="/ocean/" data-desc="订舱、提单、报关与海运费用" data-code="OCEAN"
+           data-group="企业运营" data-port="8031">
+          <span class="dot" data-probe="/ocean/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">OCEAN</span>
+          <span class="body">
+            <span class="line1"><b>飞洋海洋运输管理系统</b></span>
+            <span class="desc">订舱、提单、报关与海运费用</span>
+            <span class="meta"><i>/ocean/</i><em>:8031</em></span>
+          </span>
+        </a>
+        <a class="card" href="/cus/" target="_blank" rel="noopener"
+           data-name="飞扬关务系统" data-path="/cus/" data-desc="进出口报关、税号与合规校验" data-code="CUS"
+           data-group="企业运营" data-port="8015">
+          <span class="dot" data-probe="/cus/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">CUS</span>
+          <span class="body">
+            <span class="line1"><b>飞扬关务系统</b></span>
+            <span class="desc">进出口报关、税号与合规校验</span>
+            <span class="meta"><i>/cus/</i><em>:8015</em></span>
+          </span>
+        </a>
+        <a class="card" href="/pu/" target="_blank" rel="noopener"
+           data-name="飞瀑能源管理系统" data-path="/pu/" data-desc="能耗采集、分析与节能策略" data-code="PU"
+           data-group="企业运营" data-port="8021">
+          <span class="dot" data-probe="/pu/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">PU</span>
+          <span class="body">
+            <span class="line1"><b>飞瀑能源管理系统</b></span>
+            <span class="desc">能耗采集、分析与节能策略</span>
+            <span class="meta"><i>/pu/</i><em>:8021</em></span>
+          </span>
+        </a>
+        <a class="card" href="/cc/" target="_blank" rel="noopener"
+           data-name="飞音客服工单中心" data-path="/cc/" data-desc="多渠道工单、SLA 与坐席管理" data-code="CC"
+           data-group="企业运营" data-port="8043">
+          <span class="dot" data-probe="/cc/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">CC</span>
+          <span class="body">
+            <span class="line1"><b>飞音客服工单中心</b></span>
+            <span class="desc">多渠道工单、SLA 与坐席管理</span>
+            <span class="meta"><i>/cc/</i><em>:8043</em></span>
+          </span>
+        </a>
+        <a class="card" href="/bi/" target="_blank" rel="noopener"
+           data-name="飞瞰 BI 报表中心" data-path="/bi/" data-desc="自助取数、看板与大屏" data-code="BI"
+           data-group="企业运营" data-port="8041">
+          <span class="dot" data-probe="/bi/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">BI</span>
+          <span class="body">
+            <span class="line1"><b>飞瞰 BI 报表中心</b></span>
+            <span class="desc">自助取数、看板与大屏</span>
+            <span class="meta"><i>/bi/</i><em>:8041</em></span>
+          </span>
+        </a>
+        <a class="card" href="/yuqing/" target="_blank" rel="noopener"
+           data-name="飞舆舆情监控系统" data-path="/yuqing/" data-desc="关键词监测、情感分析与预警" data-code="YUQING"
+           data-group="企业运营" data-port="8055">
+          <span class="dot" data-probe="/yuqing/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">YUQING</span>
+          <span class="body">
+            <span class="line1"><b>飞舆舆情监控系统</b></span>
+            <span class="desc">关键词监测、情感分析与预警</span>
+            <span class="meta"><i>/yuqing/</i><em>:8055</em></span>
+          </span>
+        </a>
+        <a class="card" href="/fh/" target="_blank" rel="noopener"
+           data-name="飞虹股票交易系统" data-path="/fh/" data-desc="行情、持仓与策略回测" data-code="FH"
+           data-group="企业运营" data-port="8016">
+          <span class="dot" data-probe="/fh/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">FH</span>
+          <span class="body">
+            <span class="line1"><b>飞虹股票交易系统</b></span>
+            <span class="desc">行情、持仓与策略回测</span>
+            <span class="meta"><i>/fh/</i><em>:8016</em></span>
+          </span>
+        </a>
+        <a class="card" href="/feifu/" target="_blank" rel="noopener"
+           data-name="飞付收付款" data-path="/feifu/" data-desc="跨境收付款、结汇与对账" data-code="FEIFU"
+           data-group="企业运营" data-port="8077">
+          <span class="dot" data-probe="/feifu/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">FEIFU</span>
+          <span class="body">
+            <span class="line1"><b>飞付收付款</b></span>
+            <span class="desc">跨境收付款、结汇与对账</span>
+            <span class="meta"><i>/feifu/</i><em>:8077</em></span>
+          </span>
+        </a>
+        <a class="card" href="/leadgen/" target="_blank" rel="noopener"
+           data-name="AI 获客系统" data-path="/leadgen/" data-desc="线索采集、评分与触达工作台" data-code="LEADGEN"
+           data-group="企业运营" data-port="8012">
+          <span class="dot" data-probe="/leadgen/" title="检测中"></span>
+          <span class="code" style="color:#0d9488;background:#0d948814">LEADGEN</span>
+          <span class="body">
+            <span class="line1"><b>AI 获客系统</b><span class="tag">AI</span></span>
+            <span class="desc">线索采集、评分与触达工作台</span>
+            <span class="meta"><i>/leadgen/</i><em>:8012</em></span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="g-ec">
+      <header class="ghead">
+        <h2><i style="background:#e11d48"></i>电商矩阵</h2>
+        <p>十二种电商形态，共用一套商品与订单底座，各自独立站点。<span class="cnt">12 个</span></p>
+      </header>
+      <div class="grid">
+        <a class="card" href="/shi/" target="_blank" rel="noopener"
+           data-name="飞市" data-path="/shi/" data-desc="综合类目商城，商品 / 购物车 / 订单" data-code="SHI"
+           data-group="电商矩阵" data-port="8101">
+          <span class="dot" data-probe="/shi/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">SHI</span>
+          <span class="body">
+            <span class="line1"><b>飞市</b></span>
+            <span class="desc">综合类目商城，商品 / 购物车 / 订单</span>
+            <span class="meta"><i>/shi/</i><em>:8101</em></span>
+          </span>
+        </a>
+        <a class="card" href="/live/" target="_blank" rel="noopener"
+           data-name="飞播" data-path="/live/" data-desc="直播带货，直播间 + 弹幕 + 下单" data-code="LIVE"
+           data-group="电商矩阵" data-port="8102">
+          <span class="dot" data-probe="/live/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">LIVE</span>
+          <span class="body">
+            <span class="line1"><b>飞播</b></span>
+            <span class="desc">直播带货，直播间 + 弹幕 + 下单</span>
+            <span class="meta"><i>/live/</i><em>:8102</em></span>
+          </span>
+        </a>
+        <a class="card" href="/tuan/" target="_blank" rel="noopener"
+           data-name="飞团" data-path="/tuan/" data-desc="社区团购，拼团与团长分佣" data-code="TUAN"
+           data-group="电商矩阵" data-port="8103">
+          <span class="dot" data-probe="/tuan/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">TUAN</span>
+          <span class="body">
+            <span class="line1"><b>飞团</b></span>
+            <span class="desc">社区团购，拼团与团长分佣</span>
+            <span class="meta"><i>/tuan/</i><em>:8103</em></span>
+          </span>
+        </a>
+        <a class="card" href="/tao/" target="_blank" rel="noopener"
+           data-name="飞淘" data-path="/tao/" data-desc="二手交易，含质检报告与担保交易" data-code="TAO"
+           data-group="电商矩阵" data-port="8104">
+          <span class="dot" data-probe="/tao/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">TAO</span>
+          <span class="body">
+            <span class="line1"><b>飞淘</b></span>
+            <span class="desc">二手交易，含质检报告与担保交易</span>
+            <span class="meta"><i>/tao/</i><em>:8104</em></span>
+          </span>
+        </a>
+        <a class="card" href="/huan/" target="_blank" rel="noopener"
+           data-name="飞寰" data-path="/huan/" data-desc="跨境出海，多币种与海外仓" data-code="HUAN"
+           data-group="电商矩阵" data-port="8105">
+          <span class="dot" data-probe="/huan/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">HUAN</span>
+          <span class="body">
+            <span class="line1"><b>飞寰</b></span>
+            <span class="desc">跨境出海，多币种与海外仓</span>
+            <span class="meta"><i>/huan/</i><em>:8105</em></span>
+          </span>
+        </a>
+        <a class="card" href="/song/" target="_blank" rel="noopener"
+           data-name="飞送" data-path="/song/" data-desc="即时零售，门店库存 + 骑手配送" data-code="SONG"
+           data-group="电商矩阵" data-port="8106">
+          <span class="dot" data-probe="/song/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">SONG</span>
+          <span class="body">
+            <span class="line1"><b>飞送</b></span>
+            <span class="desc">即时零售，门店库存 + 骑手配送</span>
+            <span class="meta"><i>/song/</i><em>:8106</em></span>
+          </span>
+        </a>
+        <a class="card" href="/gou/" target="_blank" rel="noopener"
+           data-name="飞购" data-path="/gou/" data-desc="B2B 批发，询价、报价与企业采购" data-code="GOU"
+           data-group="电商矩阵" data-port="8107">
+          <span class="dot" data-probe="/gou/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">GOU</span>
+          <span class="body">
+            <span class="line1"><b>飞购</b></span>
+            <span class="desc">B2B 批发，询价、报价与企业采购</span>
+            <span class="meta"><i>/gou/</i><em>:8107</em></span>
+          </span>
+        </a>
+        <a class="card" href="/ka/" target="_blank" rel="noopener"
+           data-name="飞卡" data-path="/ka/" data-desc="会员储值电商，等级权益体系" data-code="KA"
+           data-group="电商矩阵" data-port="8108">
+          <span class="dot" data-probe="/ka/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">KA</span>
+          <span class="body">
+            <span class="line1"><b>飞卡</b></span>
+            <span class="desc">会员储值电商，等级权益体系</span>
+            <span class="meta"><i>/ka/</i><em>:8108</em></span>
+          </span>
+        </a>
+        <a class="card" href="/xian/" target="_blank" rel="noopener"
+           data-name="飞鲜" data-path="/xian/" data-desc="生鲜电商，供应商、秒杀与配送时段" data-code="XIAN"
+           data-group="电商矩阵" data-port="8109">
+          <span class="dot" data-probe="/xian/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">XIAN</span>
+          <span class="body">
+            <span class="line1"><b>飞鲜</b></span>
+            <span class="desc">生鲜电商，供应商、秒杀与配送时段</span>
+            <span class="meta"><i>/xian/</i><em>:8109</em></span>
+          </span>
+        </a>
+        <a class="card" href="/cao/" target="_blank" rel="noopener"
+           data-name="飞草" data-path="/cao/" data-desc="内容种草，笔记挂商品" data-code="CAO"
+           data-group="电商矩阵" data-port="8110">
+          <span class="dot" data-probe="/cao/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">CAO</span>
+          <span class="body">
+            <span class="line1"><b>飞草</b></span>
+            <span class="desc">内容种草，笔记挂商品</span>
+            <span class="meta"><i>/cao/</i><em>:8110</em></span>
+          </span>
+        </a>
+        <a class="card" href="/pai/" target="_blank" rel="noopener"
+           data-name="飞牌" data-path="/pai/" data-desc="品牌独立站 DTC，订阅与营销活动" data-code="PAI"
+           data-group="电商矩阵" data-port="8111">
+          <span class="dot" data-probe="/pai/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">PAI</span>
+          <span class="body">
+            <span class="line1"><b>飞牌</b></span>
+            <span class="desc">品牌独立站 DTC，订阅与营销活动</span>
+            <span class="meta"><i>/pai/</i><em>:8111</em></span>
+          </span>
+        </a>
+        <a class="card" href="/zao/" target="_blank" rel="noopener"
+           data-name="飞造" data-path="/zao/" data-desc="C2M 工厂直供，定制选项与预售" data-code="ZAO"
+           data-group="电商矩阵" data-port="8112">
+          <span class="dot" data-probe="/zao/" title="检测中"></span>
+          <span class="code" style="color:#e11d48;background:#e11d4814">ZAO</span>
+          <span class="body">
+            <span class="line1"><b>飞造</b></span>
+            <span class="desc">C2M 工厂直供，定制选项与预售</span>
+            <span class="meta"><i>/zao/</i><em>:8112</em></span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="g-api">
+      <header class="ghead">
+        <h2><i style="background:#d97706"></i>AI 能力服务</h2>
+        <p>只有 HTTP 接口，没有管理界面，点进去是 Swagger 文档。<span class="cnt">3 个</span></p>
+      </header>
+      <div class="grid">
+        <a class="card" href="/qc/docs" target="_blank" rel="noopener"
+           data-name="AI 智能品检系统" data-path="/qc/docs" data-desc="缺陷检测判定、复判回流、质量追溯与模型灰度" data-code="QC"
+           data-group="AI 能力服务" data-port="8010">
+          <span class="dot" data-probe="/qc/docs" title="检测中"></span>
+          <span class="code" style="color:#d97706;background:#d9770614">QC</span>
+          <span class="body">
+            <span class="line1"><b>AI 智能品检系统</b><span class="tag">API</span></span>
+            <span class="desc">缺陷检测判定、复判回流、质量追溯与模型灰度</span>
+            <span class="meta"><i>/qc/docs</i><em>:8010</em></span>
+          </span>
+        </a>
+        <a class="card" href="/cs/docs" target="_blank" rel="noopener"
+           data-name="AI 智能客服系统" data-path="/cs/docs" data-desc="意图识别、多轮对话与工单自动生成" data-code="CS"
+           data-group="AI 能力服务" data-port="8011">
+          <span class="dot" data-probe="/cs/docs" title="检测中"></span>
+          <span class="code" style="color:#d97706;background:#d9770614">CS</span>
+          <span class="body">
+            <span class="line1"><b>AI 智能客服系统</b><span class="tag">API</span></span>
+            <span class="desc">意图识别、多轮对话与工单自动生成</span>
+            <span class="meta"><i>/cs/docs</i><em>:8011</em></span>
+          </span>
+        </a>
+        <a class="card" href="/xhs/docs" target="_blank" rel="noopener"
+           data-name="小红书文案生成智能体" data-path="/xhs/docs" data-desc="品牌知识库、选题、内容工厂与合规闸门" data-code="XHS"
+           data-group="AI 能力服务" data-port="8013">
+          <span class="dot" data-probe="/xhs/docs" title="检测中"></span>
+          <span class="code" style="color:#d97706;background:#d9770614">XHS</span>
+          <span class="body">
+            <span class="line1"><b>小红书文案生成智能体</b><span class="tag">API</span></span>
+            <span class="desc">品牌知识库、选题、内容工厂与合规闸门</span>
+            <span class="meta"><i>/xhs/docs</i><em>:8013</em></span>
+          </span>
+        </a>
+      </div>
+    </section>
+    <div class="empty" id="empty">没有匹配的系统，换个关键词试试。</div>
+  </div>
+</main>
+
+<footer class="btm">
+  <div class="wrap">
+    <span>登记时间 2026-11-12 12:11 · 新增系统后重跑 <code>build_nav.py</code> 刷新本页</span>
+    <span>绿点在线 · 黄点需登录或非 200 · 红点无响应</span>
+  </div>
+</footer>
+
+<div class="mask" id="mask" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shName">
+    <button class="x" id="shX" type="button" aria-label="关闭">×</button>
+    <div class="sh-head">
+      <span class="sh-icon" id="shIcon"></span>
+      <span>
+        <b id="shName">应用名称</b>
+        <i>添加到主屏幕后从桌面图标直接进，全屏、没有地址栏</i>
+      </span>
+    </div>
+    <div class="tabs" id="shTabs" role="tablist">
+      <button type="button" data-os="android" role="tab">安卓</button>
+      <button type="button" data-os="ios" role="tab">iPhone / iPad</button>
+      <button type="button" data-os="pc" role="tab">电脑</button>
+    </div>
+    <ol class="steps" id="shSteps"></ol>
+    <div class="sh-warn" id="shWarn" hidden>
+      你在微信里打开这个页面，微信内不支持添加到桌面。点右上角「···」→「在浏览器打开」，再回来装。
+    </div>
+    <div class="sh-foot">
+      <a class="sh-open" id="shOpen" href="#" target="_blank" rel="noopener">直接打开</a>
+      <button class="sh-copy" id="shCopy" type="button">复制链接</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var DATA = [{"g": "platform", "code": "KB", "name": "万千知识库", "path": "/", "port": 8080, "desc": "文档沉淀、RAG 检索与 AI 问答的入口", "tag": "本站"}, {"g": "platform", "code": "SSO", "name": "飞证统一身份中心", "path": "/sso/", "port": 8040, "desc": "单点登录、令牌签发与权限下发", "tag": "基础"}, {"g": "platform", "code": "MDM", "name": "飞数主数据中心", "path": "/mdm/", "port": 8053, "desc": "物料、客户、供应商等主数据的唯一来源", "tag": "基础"}, {"g": "platform", "code": "DMP", "name": "飞舞数据中台", "path": "/dmp/", "port": 8054, "desc": "跨系统数据汇聚、指标计算与对外取数", "tag": "基础"}, {"g": "platform", "code": "NAO", "name": "飞脑 AI Agent 网关", "path": "/nao/", "port": 8060, "desc": "Agent 编排、工具注册与模型路由", "tag": "AI"}, {"g": "rd", "code": "PM", "name": "飞项项目管理系统", "path": "/pm/", "port": 8042, "desc": "任务、工时、风险与交付进度", "tag": "主力"}, {"g": "rd", "code": "IPD", "name": "飞研研发管理系统", "path": "/fy/", "port": 8061, "desc": "IPD 六阶段 + DCP 决策门禁 + TR 技术评审", "tag": "主力"}, {"g": "rd", "code": "KMS", "name": "飞知知识管理系统", "path": "/kms/", "port": 8050, "desc": "制度、流程、方案文档的分类归档与检索", "tag": ""}, {"g": "rd", "code": "LMS", "name": "飞学企业学习平台", "path": "/lms/", "port": 8049, "desc": "课程、学习路径与培训记录", "tag": ""}, {"g": "rd", "code": "EDU", "name": "飞育教育管理系统", "path": "/edu/", "port": 8025, "desc": "教学排课、学员与考核管理", "tag": ""}, {"g": "rd", "code": "OKR", "name": "飞绩绩效管理系统", "path": "/okr/", "port": 8047, "desc": "目标对齐与季度绩效评估", "tag": ""}, {"g": "biz", "code": "ERP", "name": "飞鸢 ERP", "path": "/erp/", "port": 8017, "desc": "产销存一体化，与财务、成本联动", "tag": "核心"}, {"g": "biz", "code": "FIN", "name": "飞云财务核算系统", "path": "/fin/", "port": 8014, "desc": "总账、应收应付、期末结账", "tag": "核心"}, {"g": "biz", "code": "FINAN", "name": "飞融金融管理系统", "path": "/finan/", "port": 8030, "desc": "资金计划、融资与授信管理", "tag": ""}, {"g": "biz", "code": "COST", "name": "飞奔成本管理系统", "path": "/cost/", "port": 8020, "desc": "标准成本、差异分析与成本还原", "tag": ""}, {"g": "biz", "code": "TAX", "name": "飞税税务管理系统", "path": "/tax/", "port": 8024, "desc": "发票、申报与税负测算", "tag": ""}, {"g": "biz", "code": "CLM", "name": "飞签电子合同系统", "path": "/clm/", "port": 8045, "desc": "合同起草、会签、电子签章与台账", "tag": ""}, {"g": "biz", "code": "HR", "name": "飞花 HRM", "path": "/hr/", "port": 8019, "desc": "组织、人事、薪酬与考勤", "tag": ""}, {"g": "biz", "code": "ATS", "name": "飞聘招聘管理系统", "path": "/ats/", "port": 8048, "desc": "职位发布、简历筛选与面试流转", "tag": ""}, {"g": "biz", "code": "OA", "name": "飞效 OA 管理系统", "path": "/oa/", "port": 8023, "desc": "审批、公文、会议与日程", "tag": ""}, {"g": "biz", "code": "FLOW", "name": "飞流流程管理系统", "path": "/flow/", "port": 8018, "desc": "流程建模、运行时引擎与超时催办", "tag": ""}, {"g": "biz", "code": "ITSM", "name": "飞维 IT 服务台", "path": "/itsm/", "port": 8051, "desc": "工单、事件、问题与变更管理", "tag": ""}, {"g": "biz", "code": "EAM", "name": "飞衡设备维保系统", "path": "/eam/", "port": 8044, "desc": "设备台账、点检、维修与备件", "tag": ""}, {"g": "biz", "code": "EHS", "name": "飞安安全环保系统", "path": "/ehs/", "port": 8052, "desc": "隐患排查、作业许可与环保台账", "tag": ""}, {"g": "biz", "code": "FHEMS", "name": "飞环环保物质管理系统", "path": "/fhems/", "port": 8032, "desc": "危废、排放与环保物资全流程记录", "tag": ""}, {"g": "biz", "code": "APS", "name": "飞划 APS 管理系统", "path": "/aps/", "port": 8022, "desc": "高级排产、产能平衡与交期承诺", "tag": ""}, {"g": "biz", "code": "MALL", "name": "飞铺电商商城系统", "path": "/mall/", "port": 8046, "desc": "企业自营商城，商品与订单管理", "tag": ""}, {"g": "biz", "code": "RETAIL", "name": "飞售零售管理系统", "path": "/retail/", "port": 8029, "desc": "门店、收银、会员与促销", "tag": ""}, {"g": "biz", "code": "RMS", "name": "飞餐餐饮管理系统", "path": "/rms/", "port": 8027, "desc": "点餐、出品、桌台与外卖对接", "tag": ""}, {"g": "biz", "code": "HIS", "name": "飞医医疗管理系统", "path": "/his/", "port": 8028, "desc": "挂号、门诊、住院与医嘱", "tag": ""}, {"g": "biz", "code": "TMS", "name": "飞运运输管理系统", "path": "/tms/", "port": 8026, "desc": "运单、调度、在途跟踪与结算", "tag": ""}, {"g": "biz", "code": "OCEAN", "name": "飞洋海洋运输管理系统", "path": "/ocean/", "port": 8031, "desc": "订舱、提单、报关与海运费用", "tag": ""}, {"g": "biz", "code": "CUS", "name": "飞扬关务系统", "path": "/cus/", "port": 8015, "desc": "进出口报关、税号与合规校验", "tag": ""}, {"g": "biz", "code": "PU", "name": "飞瀑能源管理系统", "path": "/pu/", "port": 8021, "desc": "能耗采集、分析与节能策略", "tag": ""}, {"g": "biz", "code": "CC", "name": "飞音客服工单中心", "path": "/cc/", "port": 8043, "desc": "多渠道工单、SLA 与坐席管理", "tag": ""}, {"g": "biz", "code": "BI", "name": "飞瞰 BI 报表中心", "path": "/bi/", "port": 8041, "desc": "自助取数、看板与大屏", "tag": ""}, {"g": "biz", "code": "YUQING", "name": "飞舆舆情监控系统", "path": "/yuqing/", "port": 8055, "desc": "关键词监测、情感分析与预警", "tag": ""}, {"g": "biz", "code": "FH", "name": "飞虹股票交易系统", "path": "/fh/", "port": 8016, "desc": "行情、持仓与策略回测", "tag": ""}, {"g": "biz", "code": "FEIFU", "name": "飞付收付款", "path": "/feifu/", "port": 8077, "desc": "跨境收付款、结汇与对账", "tag": ""}, {"g": "biz", "code": "LEADGEN", "name": "AI 获客系统", "path": "/leadgen/", "port": 8012, "desc": "线索采集、评分与触达工作台", "tag": "AI"}, {"g": "ec", "code": "SHI", "name": "飞市", "path": "/shi/", "port": 8101, "desc": "综合类目商城，商品 / 购物车 / 订单", "tag": ""}, {"g": "ec", "code": "LIVE", "name": "飞播", "path": "/live/", "port": 8102, "desc": "直播带货，直播间 + 弹幕 + 下单", "tag": ""}, {"g": "ec", "code": "TUAN", "name": "飞团", "path": "/tuan/", "port": 8103, "desc": "社区团购，拼团与团长分佣", "tag": ""}, {"g": "ec", "code": "TAO", "name": "飞淘", "path": "/tao/", "port": 8104, "desc": "二手交易，含质检报告与担保交易", "tag": ""}, {"g": "ec", "code": "HUAN", "name": "飞寰", "path": "/huan/", "port": 8105, "desc": "跨境出海，多币种与海外仓", "tag": ""}, {"g": "ec", "code": "SONG", "name": "飞送", "path": "/song/", "port": 8106, "desc": "即时零售，门店库存 + 骑手配送", "tag": ""}, {"g": "ec", "code": "GOU", "name": "飞购", "path": "/gou/", "port": 8107, "desc": "B2B 批发，询价、报价与企业采购", "tag": ""}, {"g": "ec", "code": "KA", "name": "飞卡", "path": "/ka/", "port": 8108, "desc": "会员储值电商，等级权益体系", "tag": ""}, {"g": "ec", "code": "XIAN", "name": "飞鲜", "path": "/xian/", "port": 8109, "desc": "生鲜电商，供应商、秒杀与配送时段", "tag": ""}, {"g": "ec", "code": "CAO", "name": "飞草", "path": "/cao/", "port": 8110, "desc": "内容种草，笔记挂商品", "tag": ""}, {"g": "ec", "code": "PAI", "name": "飞牌", "path": "/pai/", "port": 8111, "desc": "品牌独立站 DTC，订阅与营销活动", "tag": ""}, {"g": "ec", "code": "ZAO", "name": "飞造", "path": "/zao/", "port": 8112, "desc": "C2M 工厂直供，定制选项与预售", "tag": ""}, {"g": "api", "code": "QC", "name": "AI 智能品检系统", "path": "/qc/docs", "port": 8010, "desc": "缺陷检测判定、复判回流、质量追溯与模型灰度", "tag": "API"}, {"g": "api", "code": "CS", "name": "AI 智能客服系统", "path": "/cs/docs", "port": 8011, "desc": "意图识别、多轮对话与工单自动生成", "tag": "API"}, {"g": "api", "code": "XHS", "name": "小红书文案生成智能体", "path": "/xhs/docs", "port": 8013, "desc": "品牌知识库、选题、内容工厂与合规闸门", "tag": "API"}];
+
+  /* ---- 搜索 ---- */
+  var q = document.getElementById('q');
+  var items = [].slice.call(document.querySelectorAll('.card, .appmain'));
+  var groups = [].slice.call(document.querySelectorAll('.group'));
+  var empty = document.getElementById('empty');
+
+  function filter() {
+    var kw = q.value.trim().toLowerCase();
+    var hit = 0;
+    items.forEach(function (el) {
+      var d = el.dataset;
+      var hay = (d.name + ' ' + d.path + ' ' + d.desc + ' ' + d.code + ' ' + d.port + ' ' + (d.group || '')).toLowerCase();
+      var on = !kw || hay.indexOf(kw) > -1;
+      var box = (el.closest && el.closest('.appcard')) || el;
+      box.style.display = on ? '' : 'none';
+      if (on) hit++;
+    });
+    groups.forEach(function (g) {
+      var n = g.querySelectorAll('.card:not([style*="none"]), .appcard:not([style*="none"])').length;
+      g.style.display = n ? '' : 'none';
+    });
+    empty.style.display = hit ? 'none' : 'block';
+  }
+  q.addEventListener('input', filter);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); }
+    if (e.key === 'Escape' && document.activeElement === q) { q.value = ''; filter(); q.blur(); }
+  });
+
+  /* ---- 状态探活（同源，限并发 6） ---- */
+  var dots = [].slice.call(document.querySelectorAll('.dot'));
+  var tip = document.getElementById('probeTip');
+  var btn = document.getElementById('reprobe');
+  var stOk = document.getElementById('stOk');
+  var stBad = document.getElementById('stBad');
+
+  function probeOne(dot) {
+    var path = dot.dataset.probe;
+    var done = false;
+    var ac = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ac) ac.abort(); }, 6000);
+    function finish(st) {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      dot.dataset.st = st;
+      dot.title = st === 'ok' ? '在线' : (st === 'warn' ? '有响应但非 200（可能需登录）' : '无响应');
+      tally();
+    }
+    fetch(path, { method: 'GET', cache: 'no-store', credentials: 'omit', signal: ac ? ac.signal : undefined })
+      .then(function (r) { finish(r.ok ? 'ok' : (r.status < 500 ? 'warn' : 'err')); })
+      .catch(function () { finish('err'); });
+  }
+
+  var counted = 0, nOk = 0, nBad = 0;
+  function tally(reset) {
+    if (reset) { counted = 0; nOk = 0; nBad = 0; }
+    counted++;
+    var st = dots.filter(function (d) { return d.dataset.st; });
+    nOk = st.filter(function (d) { return d.dataset.st === 'ok'; }).length;
+    nBad = st.length - nOk;
+    stOk.textContent = nOk;
+    stBad.textContent = nBad;
+    tip.textContent = st.length + ' / ' + dots.length + ' 已检测';
+  }
+
+  function runProbe() {
+    btn.disabled = true;
+    dots.forEach(function (d) { delete d.dataset.st; d.title = '检测中'; });
+    stOk.textContent = '—'; stBad.textContent = '—';
+    tip.textContent = '状态检测中…';
+    counted = 0; nOk = 0; nBad = 0;
+
+    var i = 0, running = 0, MAX = 6;
+    function next() {
+      while (running < MAX && i < dots.length) {
+        running++;
+        (function (dot) {
+          probeOne(dot);
+          setTimeout(function () { running--; next(); }, 40);
+        })(dots[i++]);
+      }
+      if (i >= dots.length && running === 0) {
+        btn.disabled = false;
+        tip.textContent = dots.length + ' 个已检测';
+      }
+    }
+    next();
+  }
+
+  btn.addEventListener('click', runProbe);
+  runProbe();
+
+  /* ---- 手机 APP 安装引导 ---- */
+  var UA = navigator.userAgent;
+  var inWx = /MicroMessenger/i.test(UA);
+  var OS_STEPS = {
+    android: [
+      '用手机上的 Chrome 或 Edge 打开下面的链接，进入 <b>%N%</b>',
+      '点浏览器右上角 <b>⋮</b>，选「安装应用」或「添加到主屏幕」',
+      '确认后桌面出现图标，以后点图标直接进，全屏、没有地址栏'
+    ],
+    ios: [
+      '用 <b>Safari</b> 打开下面的链接（微信、QQ 的内置浏览器装不了）',
+      '点屏幕底部中间的 <b>分享</b> 按钮，往下找「添加到主屏幕」',
+      '点右上角「添加」，桌面就出现图标了'
+    ],
+    pc: [
+      '用 Chrome 或 Edge 打开下面的链接，进入 <b>%N%</b>',
+      '地址栏右侧会出现 <b>安装</b> 图标，点它；或者菜单 → 应用 → 安装此站点',
+      '装完从开始菜单或桌面启动，独立窗口运行，不占浏览器标签'
+    ]
+  };
+
+  var mask = document.getElementById('mask');
+  var shIcon = document.getElementById('shIcon');
+  var shName = document.getElementById('shName');
+  var shSteps = document.getElementById('shSteps');
+  var shOpen = document.getElementById('shOpen');
+  var shWarn = document.getElementById('shWarn');
+  var shCopy = document.getElementById('shCopy');
+  var osTab = 'android';
+  var curShort = '';
+  var curUrl = '';
+
+  function guessOS() {
+    if (/iPad|iPhone|iPod/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) return 'ios';
+    if (/Android/i.test(UA)) return 'android';
+    return 'pc';
+  }
+
+  function renderSteps() {
+    [].slice.call(document.querySelectorAll('#shTabs button')).forEach(function (b) {
+      b.setAttribute('aria-selected', b.dataset.os === osTab ? 'true' : 'false');
+    });
+    shSteps.innerHTML = OS_STEPS[osTab].map(function (t) {
+      return '<li>' + t.replace(/%N%/g, '<b>' + curShort + '</b>') + '</li>';
+    }).join('');
+  }
+
+  function openSheet(btn) {
+    var d = btn.dataset;
+    curShort = d.short;
+    curUrl = d.landing;
+    shIcon.innerHTML = '<img src="' + d.icon + '" alt="" onerror="this.style.display=\'none\'">';
+    shIcon.style.background = d.theme;
+    shName.textContent = d.name;
+    shOpen.href = d.landing;
+    shWarn.hidden = !inWx;
+    osTab = guessOS();
+    renderSteps();
+    mask.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSheet() {
+    mask.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  [].slice.call(document.querySelectorAll('.appinstall')).forEach(function (b) {
+    b.addEventListener('click', function (e) { e.preventDefault(); openSheet(b); });
+  });
+  [].slice.call(document.querySelectorAll('#shTabs button')).forEach(function (b) {
+    b.addEventListener('click', function () { osTab = b.dataset.os; renderSteps(); });
+  });
+  document.getElementById('shX').addEventListener('click', closeSheet);
+  mask.addEventListener('click', function (e) { if (e.target === mask) closeSheet(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !mask.hidden) closeSheet(); });
+
+  function flash(msg) {
+    var old = shCopy.textContent;
+    shCopy.textContent = msg;
+    setTimeout(function () { shCopy.textContent = old; }, 1500);
+  }
+  function fallbackCopy(t) {
+    var ta = document.createElement('textarea');
+    ta.value = t;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); flash('已复制'); } catch (err) { flash('复制失败，手动选吧'); }
+    document.body.removeChild(ta);
+  }
+  shCopy.addEventListener('click', function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(curUrl).then(function () { flash('已复制'); }, function () { fallbackCopy(curUrl); });
+    } else {
+      fallbackCopy(curUrl);
+    }
+  });
+})();
+</script>
+</body>
+</html>
