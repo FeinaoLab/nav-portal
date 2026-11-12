@@ -1,0 +1,5 @@
+.playwright-cli/
+_*.png
+__pycache__/
+*.pyc
+.deploy-tmp/
