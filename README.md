@@ -19,7 +19,9 @@
 | `build_nav.py` | 读上面两个数据源渲染出 `index.html`（单文件，CSS/JS 全内联，零外部依赖） |
 | `index.html` | 构建产物，传到服务器 `/opt/nav/` |
 | `scan_server.py` | 上服务器跑，扫实际部署情况（nginx location + systemd + 探活抓 title） |
-| `preview-desktop.png` / `preview-mobile.png` / `preview-install.png` | 效果截图（含安装引导弹层） |
+| `deploy.sh` | 一键部署：生成 → 打包 → scp → 远端解包 → 校验 |
+| `preview-desktop.png` / `preview-mobile.png` / `preview-install.png` | 线上实拍（含安装引导弹层，82 项全绿） |
+| `preview-kb-footer.png` | 万千知识库首页页脚，只有一行文字入口 |
 
 ## 手机 APP 怎么体现的
 
@@ -45,14 +47,23 @@
    ("CODE", "系统名称", "/path/", 端口号, "一句话说清它干什么", "标签"),
    ```
    标签可留空；`主力` `核心` `AI` `API` `本站` 会显示成小徽章。
-2. `python build_nav.py`
-3. `scp -i ~/.ssh/wanqian_deploy index.html root@42.193.158.63:/opt/nav/`
 
 手机端：
 
 1. `fetch_apps.py` 的 `PREFIXES` 里加前缀（顺序即页面顺序）
-2. `python fetch_apps.py` → `python build_nav.py`
-3. 同样 scp 上去
+2. `python fetch_apps.py`
+
+然后一条命令部署：
+
+```bash
+bash deploy.sh              # 只推导航页
+bash deploy.sh --with-kb    # 连万千知识库前端一起推
+```
+
+脚本做的事：`build_nav.py` 重新生成 → tar 打包 → scp 到 `/tmp` → 远端解到 `/opt/nav/`；
+带 `--with-kb` 时，知识库前端先解到 `/opt/kb/dist.new` 再整体切换，避免解压中途页面 404。最后自己 curl 校验状态码和 APP 卡片数。
+
+> 服务器只吃 `/opt/nav/index.html` 这一个文件，改完必须跑一次，否则线上还是旧的。
 
 ## 想重新扫一遍服务器
 
